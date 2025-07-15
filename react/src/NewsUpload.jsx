@@ -39,9 +39,9 @@ function NewsUpload() {
 
     try {
       // ✅ Adjust the URL and headers as per your backend
-      // await axios.post('http://localhost:3000/news', data, {
-      //   headers: { 'Content-Type': 'multipart/form-data' }
-      // });
+       await axios.post('http://localhost:3000/news', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+       });
       console.log('News uploaded successfully', formData);
     } catch (error) {
       console.error('Error uploading news:', error);
