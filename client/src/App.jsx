@@ -1,45 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import Header from './components/Header'
-import NewsCard from './components/NewsCard'
-import SortOptions from './components/SortOptions'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './Home';
+import AdminLogin from './components/AdminLogin';
+import AdminPanel from './components/AdminPanel';
+import NewsPanel from './components/NewsPanel';
+import UserLogin from './components/UserLogin';
 
 const App = () => {
-  const [news, setNews] = useState([])
-  const [searchQuery, setSearchQuery] = useState('')
-  const [sortOption, setSortOption] = useState({ category: '', time: '', place: '' })
-
-  useEffect(() => {
-    fetchNews()
-  }, [searchQuery, sortOption])
-
-  const fetchNews = async () => {
-    try {
-      const query = new URLSearchParams({
-        search: searchQuery,
-        category: sortOption.category,
-        time: sortOption.time,
-        place: sortOption.place,
-      }).toString()
-
-      const res = await fetch(`http://localhost:3000/news?${query}`)
-      const data = await res.json()
-      setNews(data)
-    } catch (error) {
-      console.error('Failed to fetch news:', error)
-    }
-  }
-
   return (
-    <div className="p-4">
-      <Header setSearchQuery={setSearchQuery} />
-      <SortOptions setSortOption={setSortOption} />
-      <div className="mt-4 grid gap-4">
-        {news.map((item) => (
-          <NewsCard key={item._id} news={item} />
-        ))}
-      </div>
-    </div>
-  )
-}
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin-dashboard" element={<AdminPanel />} />
+        <Route path="/news-panel/:id" element={<NewsPanel />} />
+        <Route path="/login" element={<UserLogin />} />
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;

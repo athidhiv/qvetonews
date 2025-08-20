@@ -1,15 +1,45 @@
-import React from 'react'
+import React from 'react';
+import { Calendar, Clock, Eye } from 'lucide-react';
 
 const NewsCard = ({ news }) => {
-  return (
-    <div className="border rounded-md p-4 shadow">
-      <h2 className="text-xl font-semibold">{news.headline}</h2>
-      <p className="text-gray-700">{news.description}</p>
-      <div className="text-sm text-gray-500 mt-2">
-        🏷 {news.category} | 📍 {news.place} | 📅 {new Date(news.createdAt).toLocaleDateString()}
-      </div>
-    </div>
-  )
-}
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
 
-export default NewsCard
+  return (
+    <article className="news-card">
+      <div className="news-image-container">
+        <img
+          src={news.imageUrl || '/api/placeholder/400/250'}
+          alt={news.headline}
+          className="news-image"
+        />
+        <span className="news-category">{news.category}</span>
+      </div>
+      
+      <div className="news-content">
+        <h3 className="news-title">{news.headline}</h3>
+        <p className="news-description">{news.description}</p>
+        
+        <div className="news-meta">
+          <div className="meta-items">
+            <span className="meta-item">
+              <Calendar size={14} />
+              {formatDate(news.createdAt)}
+            </span>
+          </div>
+          <span className="meta-item">
+            <Eye size={14} />
+            1.2k
+          </span>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+export default NewsCard;

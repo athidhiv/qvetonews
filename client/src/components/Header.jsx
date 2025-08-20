@@ -1,20 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { Search, Bell, User } from 'lucide-react';
 
-const Header = ({ setSearchQuery }) => {
+const Header = ({ onSearch }) => {
+  const [localQuery, setLocalQuery] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch(localQuery);
+  };
+
   return (
-    <div className="flex justify-between items-center gap-4">
-      <h1 className="text-3xl font-bold">📰 QVeto News</h1>
-      <input
-        type="text"
-        className="border px-2 py-1 rounded-md w-full max-w-md"
-        placeholder="Search news..."
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      <button className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700">
-        Login with Google
-      </button>
-    </div>
-  )
-}
+    <header className="header">
+      <div className="header-container">
+        <div className="logo">NewsHub</div>
+        
+        <form onSubmit={handleSubmit} className="search-form">
+          <div className="search-container">
+            <Search className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search for news..."
+              value={localQuery}
+              onChange={(e) => setLocalQuery(e.target.value)}
+              className="search-input"
+            />
+          </div>
+        </form>
 
-export default Header
+        <div className="header-actions">
+          <button className="icon-button">
+            <Bell size={20} />
+          </button>
+          <button className="icon-button">
+            <User size={20} />
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
