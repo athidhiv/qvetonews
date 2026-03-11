@@ -12,7 +12,10 @@ router.post('/create-admin', async (req, res) => {
       return res.status(401).json({ message: 'Invalid security key' });
 
     const exists = await User.findOne({ email });
-    if (exists) return res.status(409).json({ message: 'Email already exists' });
+    if (exists) {
+      console.log(`409 Conflict: Attempted to create admin with existing email - ${email}`);
+      return res.status(409).json({ message: 'Email already exists' });
+    }
 
     const passwordHash = await bcrypt.hash(password, 12);
     const user = await User.create({ email, passwordHash, role: 'admin' });
@@ -29,7 +32,10 @@ router.post('/register', async (req, res) => {
   try {
     const { email, password } = req.body;
     const exists = await User.findOne({ email });
-    if (exists) return res.status(409).json({ message: 'Email already exists' });
+    if (exists) {
+      console.log(`409 Conflict: Attempted to register with existing email - ${email}`);
+      return res.status(409).json({ message: 'Email already exists' });
+    }
 
     const passwordHash = await bcrypt.hash(password, 12);
     const user = await User.create({ email, passwordHash, role: 'user' });
@@ -42,13 +48,13 @@ router.post('/register', async (req, res) => {
 });
 
 // 3) Login — no cookies, just respond with role
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    
+
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ message: "Invalid credentials" });
     }

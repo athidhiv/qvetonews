@@ -16,7 +16,8 @@ router.get("/external", async (req, res) => {
     );
     res.json(response.data.data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("External News API Error:", err.response?.data || err.message);
+    res.status(500).json({ error: err.response?.data || err.message });
   }
 });
 // Create news
